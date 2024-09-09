@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
 
 export default class Widget extends Component {
   render() {
@@ -13,5 +13,5 @@ export default class Widget extends Component {
 }
 
 Widget.propTypes = {
-  wpObject: PropTypes.object
+  wpObject: PropTypes.object,
 };
