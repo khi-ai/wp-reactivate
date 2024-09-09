@@ -1640,6 +1640,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@prettier/plugin-php@npm:^0.22.2":
+  version: 0.22.2
+  resolution: "@prettier/plugin-php@npm:0.22.2"
+  dependencies:
+    linguist-languages: "npm:^7.27.0"
+    php-parser: "npm:^3.1.5"
+  peerDependencies:
+    prettier: ^3.0.0
+  checksum: 10c0/8fc6b429e5efcaa3f5f469fb8129452306adc5cd49d319701924dca94dbd05e0b2934cb9ba191d36e9aabd20058c71a938ecb757cfc1de24d548d5293326e975
+  languageName: node
+  linkType: hard
+
 "@rtsao/scc@npm:^1.1.0":
   version: 1.1.0
   resolution: "@rtsao/scc@npm:1.1.0"
@@ -5277,6 +5289,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"linguist-languages@npm:^7.27.0":
+  version: 7.27.0
+  resolution: "linguist-languages@npm:7.27.0"
+  checksum: 10c0/a4d4d63785155332736a59d58fe72310a4e449199e1ae7d7ba2334a81b9a10a249693d67e54af812ab36091d6396090e69b0370a3655a49f434e7e968516b714
+  languageName: node
+  linkType: hard
+
 "loader-runner@npm:^2.4.0":
   version: 2.4.0
   resolution: "loader-runner@npm:2.4.0"
@@ -6243,6 +6262,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"php-parser@npm:^3.1.5":
+  version: 3.1.5
+  resolution: "php-parser@npm:3.1.5"
+  checksum: 10c0/356b7c8d84c055f0f3838d4906edf8100fc022bd5651d81d86d705027253c3ab8a4d8f1569365e88c286e39c9d10011a1f4f86eb8afec95dad99b35f574bd7bd
+  languageName: node
+  linkType: hard
+
 "picocolors@npm:^1.0.0, picocolors@npm:^1.0.1":
   version: 1.1.0
   resolution: "picocolors@npm:1.1.0"
@@ -6303,7 +6329,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:3.3.3":
+"prettier@npm:^3.3.3":
   version: 3.3.3
   resolution: "prettier@npm:3.3.3"
   bin:
@@ -8147,6 +8173,7 @@ __metadata:
     "@babel/preset-env": "npm:^7.25.4"
     "@babel/preset-react": "npm:^7.24.7"
     "@eslint/js": "npm:^9.10.0"
+    "@prettier/plugin-php": "npm:^0.22.2"
     babel-eslint: "npm:^10.1.0"
     babel-loader: "npm:^8.3.0"
     eslint: "npm:^9.10.0"
@@ -8154,7 +8181,7 @@ __metadata:
     eslint-plugin-react: "npm:^7.35.2"
     globals: "npm:^15.9.0"
     isomorphic-fetch: "npm:^3.0.0"
-    prettier: "npm:3.3.3"
+    prettier: "npm:^3.3.3"
     prop-types: "npm:^15.8.1"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"

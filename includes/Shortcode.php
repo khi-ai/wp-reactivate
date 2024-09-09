@@ -15,84 +15,107 @@ namespace Pangolin\WPR;
 /**
  * @subpackage Shortcode
  */
-class Shortcode {
+class Shortcode
+{
+    /**
+     * Instance of this class.
+     *
+     * @since    1.0.0
+     *
+     * @var      object
+     */
+    protected static $instance = null;
 
-	/**
-	 * Instance of this class.
-	 *
-	 * @since    1.0.0
-	 *
-	 * @var      object
-	 */
-	protected static $instance = null;
+    /**
+     * Return an instance of this class.
+     *
+     * @since     1.0.0
+     *
+     * @return    object    A single instance of this class.
+     */
+    public static function get_instance()
+    {
+        // If the single instance hasn't been set, set it now.
+        if (null == self::$instance) {
+            self::$instance = new self();
+            self::$instance->do_hooks();
+        }
 
-	/**
-	 * Return an instance of this class.
-	 *
-	 * @since     1.0.0
-	 *
-	 * @return    object    A single instance of this class.
-	 */
-	public static function get_instance() {
+        return self::$instance;
+    }
 
-		// If the single instance hasn't been set, set it now.
-		if ( null == self::$instance ) {
-			self::$instance = new self;
-			self::$instance->do_hooks();
-		}
+    /**
+     * Initialize the plugin by setting localization and loading public scripts
+     * and styles.
+     *
+     * @since     1.0.0
+     */
+    private function __construct()
+    {
+        $plugin = Plugin::get_instance();
+        $this->plugin_slug = $plugin->get_plugin_slug();
+        $this->version = $plugin->get_plugin_version();
 
-		return self::$instance;
-	}
+        add_shortcode("wp-reactivate", [$this, "shortcode"]);
+    }
 
-	/**
-	 * Initialize the plugin by setting localization and loading public scripts
-	 * and styles.
-	 *
-	 * @since     1.0.0
-	 */
-	private function __construct() {
-		$plugin = Plugin::get_instance();
-		$this->plugin_slug = $plugin->get_plugin_slug();
-		$this->version = $plugin->get_plugin_version();
+    /**
+     * Handle WP actions and filters.
+     *
+     * @since 	1.0.0
+     */
+    private function do_hooks()
+    {
+        add_action("wp_enqueue_scripts", [$this, "register_frontend_scripts"]);
+    }
 
-		add_shortcode( 'wp-reactivate', array( $this, 'shortcode' ) );
-	}
+    /**
+     * Register frontend-specific javascript
+     *
+     * @since     1.0.0
+     */
+    public function register_frontend_scripts()
+    {
+        wp_register_script(
+            $this->plugin_slug . "-shortcode-script",
+            plugins_url("assets/js/shortcode.js", dirname(__FILE__)),
+            ["jquery"],
+            $this->version
+        );
+        wp_register_style(
+            $this->plugin_slug . "-shortcode-style",
+            plugins_url("assets/css/shortcode.css", dirname(__FILE__)),
+            $this->version
+        );
+    }
 
+    public function shortcode($atts)
+    {
+        wp_enqueue_script($this->plugin_slug . "-shortcode-script");
+        wp_enqueue_style($this->plugin_slug . "-shortcode-style");
 
-	/**
-	 * Handle WP actions and filters.
-	 *
-	 * @since 	1.0.0
-	 */
-	private function do_hooks() {
-		add_action( 'wp_enqueue_scripts', array( $this, 'register_frontend_scripts' ) );
-	}
+        $object_name = "wpr_object_" . uniqid();
 
-	/**
-	 * Register frontend-specific javascript
-	 *
-	 * @since     1.0.0
-	 */
-	public function register_frontend_scripts() {
-		wp_register_script( $this->plugin_slug . '-shortcode-script', plugins_url( 'assets/js/shortcode.js', dirname( __FILE__ ) ), array( 'jquery' ), $this->version );
-		wp_register_style( $this->plugin_slug . '-shortcode-style', plugins_url( 'assets/css/shortcode.css', dirname( __FILE__ ) ), $this->version );
-	}
+        $object = shortcode_atts(
+            [
+                "title" => "Hello world",
+                "api_nonce" => wp_create_nonce("wp_rest"),
+                "api_url" => rest_url($this->plugin_slug . "/v1/"),
+            ],
+            $atts,
+            "wp-reactivate"
+        );
 
-	public function shortcode( $atts ) {
-		wp_enqueue_script( $this->plugin_slug . '-shortcode-script' );
-		wp_enqueue_style( $this->plugin_slug . '-shortcode-style' );
+        wp_localize_script(
+            $this->plugin_slug . "-shortcode-script",
+            $object_name,
+            $object
+        );
 
-		$object_name = 'wpr_object_' . uniqid();
-
-		$object = shortcode_atts( array(
-			'title'       => 'Hello world',
-			'api_nonce'   => wp_create_nonce( 'wp_rest' ),
-			'api_url'	  => rest_url( $this->plugin_slug . '/v1/' ),
-		), $atts, 'wp-reactivate' );
-
-		wp_localize_script( $this->plugin_slug . '-shortcode-script', $object_name, $object );
-
-		$shortcode = '<div class="wp-reactivate-shortcode" data-object-id="' . $object_name . '"></div>';
-		return $shortcode;
-	}
+        $shortcode =
+            '<div class="wp-reactivate-shortcode" data-object-id="' .
+            $object_name .
+            '"></div>';
+        return $shortcode;
+    }
 }
